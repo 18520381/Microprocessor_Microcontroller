@@ -1,0 +1,79 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              04/06/2020 09:11:52 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #define led1 P2_0
+   3          #define led2 P2_1
+   4          #define led3 P2_2
+   5          #define led4 P2_3
+   6          #define inch P3_6
+   7          #define incm P3_7
+   8          
+   9          char num[] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8, 0x80, 0x90};
+  10          
+  11          void delay_ms(int ms)
+  12          {
+  13   1        while (ms--)
+  14   1        {
+  15   2          TMOD=0x01;
+  16   2          TH0=0xfc;
+  17   2          TL0=0x18;
+  18   2          TR0=1;
+  19   2          while (!TF0);
+  20   2          TF0=0;
+  21   2          TR0=0;
+  22   2        }
+  23   1      }
+  24          void show(unsigned char hour, unsigned char min)
+  25          {
+  26   1        unsigned char h1,h2,m1,m2,i;
+  27   1        h1=hour/10; h2=hour%10;
+  28   1        m1=min/10; m2=min%10;
+  29   1        for (i=0; i<25; i++)
+  30   1        {
+  31   2          led1=0; P0=num[h1]; delay_ms(10); led1=1;
+  32   2          led2=0; P0=num[h2]; delay_ms(10); led2=1;
+  33   2          led3=0; P0=num[m1]; delay_ms(10); led3=1;
+  34   2          led4=0; P0=num[m2]; delay_ms(10); led4=1;
+  35   2        }
+  36   1      }
+  37          void main()
+  38          {
+  39   1        unsigned char hour=0, min=0, sec=0;
+  40   1        P3_0=0;
+  41   1        while (1)
+  42   1        {
+  43   2          P3_0=~P3_0;
+  44   2          sec++;
+  45   2          show(hour,min);
+  46   2          if (sec==59) min++;
+  47   2          if (min==59) hour++;
+  48   2          if (inch==0) hour++;
+  49   2          if (incm==0) min++;
+  50   2          if (min>59) min=0;
+  51   2          if (hour>24) hour=0;
+  52   2        }
+  53   1      }
+
+C51 COMPILER V9.60.0.0   MAIN                                                              04/06/2020 09:11:52 PAGE 2   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    199    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,43 @@
+A51 MACRO ASSEMBLER  18520381_CHAPTER2_PART5_1                                            04/19/2020 19:35:26 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\18520381_Chapter2_Part5_1.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE 18520381_Chapter2_Part5_1.asm SET(SMALL) DEBUG PRINT(.\Listings\1852038
+                      1_Chapter2_Part5_1.lst) OBJECT(.\Objects\18520381_Chapter2_Part5_1.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1             ORG 0000H
+0000 020030            2             LJMP MAIN 
+000B                   3             ORG 000BH 
+000B B2A1              4             CPL P2.1 
+000D 32                5             RETI
+0030                   6             ORG 0030H    
+                       7         
+0030 758902            8     MAIN:   MOV TMOD,#02H 
+0033 758CCE            9             MOV TH0,#-50 
+0036 D28C             10             SETB TR0
+0038 75A882           11                     MOV IE, #82H
+003B 80FE             12                     SJMP $
+                      13             END 
+A51 MACRO ASSEMBLER  18520381_CHAPTER2_PART5_1                                            04/19/2020 19:35:26 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+IE . . . . . . . .  D ADDR   00A8H   A   
+MAIN . . . . . . .  C ADDR   0030H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

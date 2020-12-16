@@ -1,0 +1,301 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              05/04/2020 08:49:08 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include<string.h>
+   3          
+   4          #define Error  13   
+   5          
+   6          void cct_init(void);
+   7          void delay(int);
+   8          void lcdinit(void);
+   9          void writecmd(int);
+  10          void writedata(char);
+  11          void writeline(char[]);
+  12          void ReturnHome(void);
+  13          char READ_SWITCHES(void);
+  14          char get_key(void);
+  15          int get_num(char);
+  16          char get_func(char);
+  17          void DispError(int);
+  18          void disp_num(int);
+  19          
+  20          sbit RowA = P1^0;     //hang A
+  21          sbit RowB = P1^1;     //hang B
+  22          sbit RowC = P1^2;     //hang C
+  23          sbit RowD = P1^3;     //hang D
+  24          
+  25          sbit C1   = P1^4;     //Cot 1
+  26          sbit C2   = P1^5;     //Cot 2
+  27          sbit C3   = P1^6;     //Cot 3
+  28          sbit C4   = P1^7;     //Cot 4
+  29          
+  30          sbit E    = P3^6;     //chan E
+  31          sbit RS   = P3^7;     //chan RS
+  32          
+  33          
+  34          int main(void)
+  35          {
+  36   1         char key;            //nhan gia tri nut bam        
+  37   1         int num1 = 0;        //so thu 1
+  38   1         char func = '+';     //phep tinh giua 2 so
+  39   1         int num2 = 0;        //so thu 2
+  40   1         
+  41   1         cct_init();                  
+  42   1         lcdinit();                    
+  43   1      
+  44   1         while(1)
+  45   1         { 
+  46   2           key = get_key(); //lay so thu 1
+  47   2           writecmd(0x01);            
+  48   2         writedata(key);  //hien so vua bam len man hinh
+  49   2         num1 = get_num(key);       //chuyen so vua nhap tu char snag int
+  50   2         if(num1!=Error)            //khi nhap khong sai thi tiep tuc
+  51   2         {
+  52   3           key = get_key();   //lay dau phep tinh va tuong tu nhu lay so 1
+  53   3           writedata(key);                  
+  54   3           func = get_func(key);            
+C51 COMPILER V9.60.0.0   MAIN                                                              05/04/2020 08:49:08 PAGE 2   
+
+  55   3           if(func!='e')                   
+  56   3           {
+  57   4             key = get_key(); //lay so thu 2 va tuong tu nhu lay so 1
+  58   4             writedata(key);              
+  59   4             num2 = get_num(key);         
+  60   4             if(num2!=Error)              
+  61   4             {
+  62   5               key = get_key();
+  63   5               writedata(key);
+  64   5               if(key == '=')   //neu la dau bang thi thuc hien phep tinh va xuat ra man hinh       
+  65   5               {
+  66   6      
+  67   6                   switch(func)       
+  68   6                   {
+  69   7                   case '+': disp_num(num1+num2); break;
+  70   7                   case '-': disp_num(num1-num2); break;
+  71   7                   case 'x': disp_num(num1*num2); break;
+  72   7                   case '/': {if (num2==0) DispError(2);
+  73   8                              else disp_num(num1/num2);} break;
+  74   7                 }
+  75   6               }
+  76   5               else             
+  77   5               { 
+  78   6                 if(key == 'C')   //xoa man hinh    
+  79   6                 {
+  80   7                    writecmd(0x01);  
+  81   7                 }
+  82   6                 else
+  83   6                 {
+  84   7                  DispError(0); //bao loi nhap vao
+  85   7                 }
+  86   6               }                                 
+  87   5             }
+  88   4           }
+  89   3           }
+  90   2         }
+  91   1      }
+  92          
+  93          void cct_init(void)   //ham khoi tao gia tri
+  94          {
+  95   1        P0 = 0x00;   
+  96   1        P1 = 0xf0;  
+  97   1        P2 = 0x00;  
+  98   1        P3 = 0x00;    
+  99   1      }
+ 100          
+ 101          void delay(int a)   //ham delay
+ 102          {
+ 103   1         int i;
+ 104   1         for(i=0;i<a;i++);
+ 105   1      }
+ 106          
+ 107          void writedata(char t)    //ham in so ra man hinh
+ 108          {
+ 109   1         RS = 1;             
+ 110   1         P2 = t;            
+ 111   1         E  = 1;            
+ 112   1         delay(150);
+ 113   1         E  = 0;             
+ 114   1         delay(150);
+ 115   1      }
+ 116          
+C51 COMPILER V9.60.0.0   MAIN                                                              05/04/2020 08:49:08 PAGE 3   
+
+ 117          
+ 118          void writecmd(int z)    //ham in dau phep tinh ra man hinh
+ 119          {
+ 120   1         RS = 0;            
+ 121   1         P2 = z;           
+ 122   1         E  = 1;            
+ 123   1         delay(150);
+ 124   1         E  = 0;            
+ 125   1         delay(150);
+ 126   1      }
+ 127          
+ 128          void lcdinit(void)      //ham khoi tao man hinh lcd
+ 129          {
+ 130   1           delay(15000);
+ 131   1         writecmd(0x30);
+ 132   1           delay(4500);
+ 133   1         writecmd(0x30);
+ 134   1           delay(300);
+ 135   1         writecmd(0x30);
+ 136   1           delay(650);
+ 137   1         writecmd(0x38);    
+ 138   1         writecmd(0x0c);    
+ 139   1         writecmd(0x01);    
+ 140   1         writecmd(0x06);    
+ 141   1      }
+ 142          
+ 143          void ReturnHome(void)     //ham tra con tro ve noi bat dau
+ 144          {
+ 145   1         writecmd(0x02);
+ 146   1         delay(1500);
+ 147   1      }
+ 148          
+ 149          void writeline(char Line[])   //ham ghi chuoi
+ 150          {
+ 151   1         int i;
+ 152   1         for(i=0;i<strlen(Line);i++)
+ 153   1         {
+ 154   2            writedata(Line[i]);    
+ 155   2         }
+ 156   1         ReturnHome();          
+ 157   1      }
+ 158          
+ 159          char READ_SWITCHES(void)  //ham nhan gia tri nhap vao
+ 160          { 
+ 161   1        RowA = 0; RowB = 1; RowC = 1; RowD = 1;   //hang A
+ 162   1      
+ 163   1        if (C1 == 0) { delay(10000); while (C1==0); return '7'; }
+ 164   1        if (C2 == 0) { delay(10000); while (C2==0); return '8'; }
+ 165   1        if (C3 == 0) { delay(10000); while (C3==0); return '9'; }
+ 166   1        if (C4 == 0) { delay(10000); while (C4==0); return '/'; }
+ 167   1      
+ 168   1        RowA = 1; RowB = 0; RowC = 1; RowD = 1;   //hang B
+ 169   1      
+ 170   1        if (C1 == 0) { delay(10000); while (C1==0); return '4'; }
+ 171   1        if (C2 == 0) { delay(10000); while (C2==0); return '5'; }
+ 172   1        if (C3 == 0) { delay(10000); while (C3==0); return '6'; }
+ 173   1        if (C4 == 0) { delay(10000); while (C4==0); return 'x'; }
+ 174   1        
+ 175   1        RowA = 1; RowB = 1; RowC = 0; RowD = 1;   //hang C
+ 176   1      
+ 177   1        if (C1 == 0) { delay(10000); while (C1==0); return '1'; }
+ 178   1        if (C2 == 0) { delay(10000); while (C2==0); return '2'; }
+C51 COMPILER V9.60.0.0   MAIN                                                              05/04/2020 08:49:08 PAGE 4   
+
+ 179   1        if (C3 == 0) { delay(10000); while (C3==0); return '3'; }
+ 180   1        if (C4 == 0) { delay(10000); while (C4==0); return '-'; }
+ 181   1        
+ 182   1        RowA = 1; RowB = 1; RowC = 1; RowD = 0;   //hang D
+ 183   1      
+ 184   1        if (C1 == 0) { delay(10000); while (C1==0); return 'C'; }
+ 185   1        if (C2 == 0) { delay(10000); while (C2==0); return '0'; }
+ 186   1        if (C3 == 0) { delay(10000); while (C3==0); return '='; }
+ 187   1        if (C4 == 0) { delay(10000); while (C4==0); return '+'; }
+ 188   1      
+ 189   1        return 'n';             //cho gia tri khong phim nao duoc bam
+ 190   1      }
+ 191          
+ 192          char get_key(void)           
+ 193          {
+ 194   1        char key = 'n';             
+ 195   1      
+ 196   1        while(key=='n')              
+ 197   1          key = READ_SWITCHES();   
+ 198   1        return key;                  
+ 199   1      }
+ 200          
+ 201          int get_num(char ch)         //ham chuyen tu char sang int
+ 202          {
+ 203   1        switch(ch)
+ 204   1        {
+ 205   2          case '0': return 0; break;
+ 206   2          case '1': return 1; break;
+ 207   2          case '2': return 2; break;
+ 208   2          case '3': return 3; break;
+ 209   2          case '4': return 4; break;
+ 210   2          case '5': return 5; break;
+ 211   2          case '6': return 6; break;
+ 212   2          case '7': return 7; break;
+ 213   2          case '8': return 8; break;
+ 214   2          case '9': return 9; break;
+ 215   2          case 'C': writecmd(0x01); return Error; break;  
+ 216   2          default: DispError(0); return Error; break;     
+ 217   2        }
+ 218   1      }
+ 219          
+ 220          char get_func(char chf)            //ham phat hien loi
+ 221          {
+ 222   1        if(chf=='C')                   
+ 223   1        { 
+ 224   2          writecmd(0x01);            
+ 225   2          return 'e'; 
+ 226   2        }
+ 227   1        
+ 228   1        if( chf!='+' && chf!='-' && chf!='x' && chf!='/' ) 
+ 229   1        { 
+ 230   2          DispError(1); 
+ 231   2          return 'e'; 
+ 232   2        }
+ 233   1      
+ 234   1        return chf;                       
+ 235   1      }
+ 236          
+ 237          
+ 238          void DispError(int numb)           //ham xuat loi
+ 239          {
+ 240   1        writecmd(0x01);               
+C51 COMPILER V9.60.0.0   MAIN                                                              05/04/2020 08:49:08 PAGE 5   
+
+ 241   1        switch(numb)
+ 242   1        {
+ 243   2        case 0:   writeline("Wrong Input");       break;
+ 244   2        case 1:   writeline("Wrong Function");    break;
+ 245   2        case 2:   writeline("Division by zero");  break;
+ 246   2        default:    writeline("Wrong Input");       break;
+ 247   2        }
+ 248   1      }
+ 249          
+ 250          void disp_num(int numb)            //ham hien thi so tren lcd
+ 251          { 
+ 252   1        unsigned char UnitDigit  = 0; 
+ 253   1        unsigned char TenthDigit = 0;  
+ 254   1      
+ 255   1        if(numb<0)
+ 256   1        {
+ 257   2          numb = -1*numb;  
+ 258   2          writedata('-');  
+ 259   2        }
+ 260   1      
+ 261   1        TenthDigit = (numb/10);          
+ 262   1      
+ 263   1        if( TenthDigit != 0)            
+ 264   1          writedata(TenthDigit+0x30);  
+ 265   1      
+ 266   1        UnitDigit = numb - TenthDigit*10;
+ 267   1      
+ 268   1        writedata(UnitDigit+0x30);    
+ 269   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    953    ----
+   CONSTANT SIZE    =     44    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      13
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

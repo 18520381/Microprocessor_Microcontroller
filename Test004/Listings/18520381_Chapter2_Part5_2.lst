@@ -1,0 +1,53 @@
+A51 MACRO ASSEMBLER  18520381_CHAPTER2_PART5_2                                            04/19/2020 19:35:26 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\18520381_Chapter2_Part5_2.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE 18520381_Chapter2_Part5_2.asm SET(SMALL) DEBUG PRINT(.\Listings\1852038
+                      1_Chapter2_Part5_2.lst) OBJECT(.\Objects\18520381_Chapter2_Part5_2.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1             ORG 0
+0000 020030            2             LJMP MAIN
+000B                   3             ORG 000BH
+000B 02003F            4             LJMP TOISR
+001B                   5             ORG 001BH
+001B 020042            6             LJMP T1ISR
+0030                   7             ORG 0030H
+0030 758912            8     MAIN:   MOV TMOD, #12H
+0033 758CB9            9                     MOV TH0, #-71
+0036 D28C             10                     SETB TR0
+0038 D28F             11                     SETB TF1
+003A 75A88A           12                     MOV IE, #8AH
+003D 80FE             13                     SJMP $
+003F B297             14     TOISR:  CPL P1.7
+0041 32               15                     RETI
+0042 C28E             16     T1ISR:  CLR TR1
+0044 758DFC           17                     MOV TH1, #HIGH(-1000)
+                      18             END
+A51 MACRO ASSEMBLER  18520381_CHAPTER2_PART5_2                                            04/19/2020 19:35:26 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+IE . . . . . . . .  D ADDR   00A8H   A   
+MAIN . . . . . . .  C ADDR   0030H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+T1ISR. . . . . . .  C ADDR   0042H   A   
+TF1. . . . . . . .  B ADDR   0088H.7 A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TH1. . . . . . . .  D ADDR   008DH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TOISR. . . . . . .  C ADDR   003FH   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+TR1. . . . . . . .  B ADDR   0088H.6 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

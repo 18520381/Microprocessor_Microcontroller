@@ -1,0 +1,57 @@
+A51 MACRO ASSEMBLER  18520381_CHAPTER2_PART5_3                                            04/19/2020 19:35:26 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\18520381_Chapter2_Part5_3.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE 18520381_Chapter2_Part5_3.asm SET(SMALL) DEBUG PRINT(.\Listings\1852038
+                      1_Chapter2_Part5_3.lst) OBJECT(.\Objects\18520381_Chapter2_Part5_3.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1             ORG 0
+0000 020030            2             LJMP MAIN
+0023                   3             ORG 0023H
+0023 020045            4             LJMP SPISR
+0030                   5             ORG 0030H
+0030 758920            6     MAIN:   MOV TMOD, #20H
+0033 758DE6            7                     MOV TH1, #-26
+0036 D28E              8                     SETB TR1
+0038 75982A            9                     MOV SCON, #42
+003B 7420             10                     MOV A, #20H
+003D 75A890           11                     MOV IE, #90H
+0040 80FE             12                     SJMP $
+0042 B297             13     TOISR:  CPL P1.7
+0044 32               14                     RETI
+0045 B47F02           15     SPISR:  CJNE A, #7FH, SKIP
+0048 7420             16                     MOV A, #20H
+004A F599             17     SKIP:   MOV SBUF, A
+004C 04               18                     INC A
+004D C299             19                     CLR TI
+004F 32               20                     RETI
+                      21             END
+A51 MACRO ASSEMBLER  18520381_CHAPTER2_PART5_3                                            04/19/2020 19:35:26 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+IE . . . . . . . .  D ADDR   00A8H   A   
+MAIN . . . . . . .  C ADDR   0030H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+SBUF . . . . . . .  D ADDR   0099H   A   
+SCON . . . . . . .  D ADDR   0098H   A   
+SKIP . . . . . . .  C ADDR   004AH   A   
+SPISR. . . . . . .  C ADDR   0045H   A   
+TH1. . . . . . . .  D ADDR   008DH   A   
+TI . . . . . . . .  B ADDR   0098H.1 A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TOISR. . . . . . .  C ADDR   0042H   A   
+TR1. . . . . . . .  B ADDR   0088H.6 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

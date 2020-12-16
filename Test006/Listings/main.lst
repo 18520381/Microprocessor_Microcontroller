@@ -1,0 +1,220 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              04/20/2020 09:48:00 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <89c51rd2.H>
+   2          #include<stdio.h>
+   3          #include<math.h>
+   4          
+   5          #define dt   P1
+   6          #define RS   P2_7
+   7          #define RW   P2_6
+   8          #define EN   P2_5
+   9          #define b0   P2_0
+  10          #define b1   P0_1
+  11          #define b2   P0_2
+  12          #define b3   P0_3
+  13          
+  14          int sls,sn,dk,st,x;
+  15          
+  16          void stoptimer (void) interrupt 5 //ngat timer//
+  17            {
+  18   1        x=1;
+  19   1        TF2=0;
+  20   1        TH2=0xD8;  
+  21   1        TL2=0xEF;
+  22   1        sls++;
+  23   1        if(sls > 99)
+  24   1          {
+  25   2          sls=0;
+  26   2          sn++;
+  27   2          if(sn > 59)
+  28   2            {
+  29   3            sn=0;
+  30   3            dk++;
+  31   3            if(dk > 59)
+  32   3              {
+  33   4              dk=0;
+  34   4              st++;
+  35   4              if (st > 23) st=0;
+  36   4              }
+  37   3            }
+  38   2          }
+  39   1        }
+  40          void delayf (long int ms)
+  41             { 
+  42   1         long int i;
+  43   1            for (i=1; i<=ms; i++);
+  44   1         }
+  45          void printf (int ms)
+  46             {  
+*** ERROR C231 IN LINE 46 OF main.c: '_printf': redefinition
+  47   1           RS=0;
+  48   1         RW=0;
+  49   1         EN=1;
+  50   1         dt=ms;
+  51   1         EN=0;
+  52   1         delayf(1);
+  53   1        }
+C51 COMPILER V9.60.0.0   MAIN                                                              04/20/2020 09:48:00 PAGE 2   
+
+*** ERROR C231 IN LINE 53 OF main.c: '_printf': redefinition
+  54          void writechar (char dataf[],long int ms)
+  55             {
+  56   1          int i=0;
+  57   1        while(dataf [i]!=0)
+  58   1           {
+  59   2           RS=1;
+  60   2           RW=0;
+  61   2           EN=1;
+  62   2           dt=dataf[i];
+  63   2           EN=0;
+  64   2           i++;
+  65   2           delayf(ms);
+  66   2           }
+  67   1        }
+  68          void writeint (int num ,long int ms)
+  69             { 
+  70   1             RS=1;
+  71   1           RW=0;
+  72   1           EN=1;
+  73   1           dt=num;
+  74   1           EN=0;
+  75   1           delayf(ms);
+  76   1        }
+  77          int findf (int a,int b)
+  78            {
+  79   1          int c;
+  80   1          while (a>=b) a=a-b;
+  81   1          c=a;
+  82   1          return (c);
+  83   1        }
+  84          void lcd(void)
+  85               { 
+  86   1          int starter[]={12,56,6}, t;
+  87   1          for (t=0; t<2; t++) printf(starter[t]);
+  88   1          }
+  89          void datalcd(void)
+  90            {
+  91   1        int a,b,d;
+  92   1        printf(2);
+  93   1        writechar(" ",1);
+  94   1      
+  95   1        a=findf(st,10);
+  96   1        d=st-a;
+  97   1        b=d/10;
+  98   1        writeint(b+48,1);
+  99   1        writeint(a+48,1);
+ 100   1      
+ 101   1        a=findf(dk,10);
+ 102   1        d=dk-a;
+ 103   1        b=d/10;
+ 104   1        writechar(":",1);
+ 105   1        writeint(b+48,1);
+ 106   1        writeint(a+48,1);
+ 107   1      
+ 108   1        a=findf(sn,10);
+ 109   1        d=sn-a;
+ 110   1        b=d/10;
+ 111   1        writechar(":",1);
+ 112   1        writeint(b+48,1);
+ 113   1        writeint(a+48,1);
+ 114   1      
+C51 COMPILER V9.60.0.0   MAIN                                                              04/20/2020 09:48:00 PAGE 3   
+
+ 115   1      
+ 116   1        a=findf(sls,10);
+ 117   1        d=sls-a;
+ 118   1        b=d/10;
+ 119   1        writechar(":",1);
+ 120   1        writeint(b+48,1);
+ 121   1        writeint(a+48,1);
+ 122   1        }
+ 123          void main (void)
+ 124          {
+ 125   1        int e=1,i=0,k=0;
+ 126   1        b0=1;
+ 127   1        lcd();
+ 128   1        printf(1);
+ 129   1        T2CON = 0x80;
+ 130   1        ET2 = 1;
+ 131   1        TR2 = 0;
+ 132   1        EA = 1;
+ 133   1        st=0;
+ 134   1        dk=0;
+ 135   1        sn=0;
+ 136   1        sls=0;
+ 137   1          TH2=0xD8;
+ 138   1          TL2=0xEF;
+ 139   1          while(1)
+ 140   1          {
+ 141   2           if(e==1)
+ 142   2            {
+ 143   3            while(x)
+ 144   3              {
+ 145   4              datalcd();
+ 146   4              x=0; 
+ 147   4              }
+ 148   3            }
+ 149   2            while(b1)
+ 150   2            {
+ 151   3            st=0;
+ 152   3            dk=0;
+ 153   3            sn=0;
+ 154   3            sls=0;
+ 155   3            TR2=0;
+ 156   3            i=0;
+ 157   3            printf(192);
+ 158   3            writechar("START ",1);
+ 159   3            datalcd();
+ 160   3            while(b1) {}
+ 161   3            }
+ 162   2            while(b3)
+ 163   2            {
+ 164   3            if(i==0)
+ 165   3              {
+ 166   4              TR2=1;
+ 167   4              e=1;
+ 168   4              i=1;
+ 169   4            printf(192);
+ 170   4              }
+ 171   3            else
+ 172   3              {
+ 173   4              TR2=0;
+ 174   4              e=0;
+ 175   4              i=0;
+ 176   4              printf(192);
+C51 COMPILER V9.60.0.0   MAIN                                                              04/20/2020 09:48:00 PAGE 4   
+
+ 177   4              }
+ 178   3             while(b3)
+ 179   3              {}
+ 180   3            }
+ 181   2          while(b2)
+ 182   2            {
+ 183   3            if(k==0)
+ 184   3              {
+ 185   4              TR2=1;
+ 186   4              e=0;
+ 187   4              k=1;
+ 188   4              printf(192);
+ 189   4              }
+ 190   3            else
+ 191   3              {
+ 192   4              TR2=1;
+ 193   4              e=1;
+ 194   4              k=0;
+ 195   4              }
+ 196   3            while(b2)
+ 197   3              {}
+ 198   3            }
+ 199   2          }
+ 200   1      }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  2 ERROR(S)

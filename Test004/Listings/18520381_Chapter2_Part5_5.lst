@@ -1,0 +1,78 @@
+A51 MACRO ASSEMBLER  18520381_CHAPTER2_PART5_5                                            04/19/2020 19:35:11 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\18520381_Chapter2_Part5_5.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE 18520381_Chapter2_Part5_5.asm SET(SMALL) DEBUG PRINT(.\Listings\1852038
+                      1_Chapter2_Part5_5.lst) OBJECT(.\Objects\18520381_Chapter2_Part5_5.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1             ORG 0
+0000 020030            2             LJMP MAIN
+0003 02003A            3             LJMP EX0ISR
+000B                   4             ORG 000BH
+000B 020045            5             LJMP TOISR
+001B                   6             ORG 001BH
+001B 020057            7             LJMP T1ISR
+0030                   8             ORG 0030H
+0030 D288              9     MAIN:   SETB IT0
+0032 758911           10                     MOV TMOD, #11H
+0035 75A881           11                     MOV IE, #81H
+0038 80FE             12                     SJMP $
+003A 7FC8             13     EX0ISR: MOV R7, #200
+003C D28D             14                     SETB TF0
+003E D28F             15                     SETB TF1
+0040 D2A9             16                     SETB ET0
+0042 D2AB             17                     SETB ET1
+0044 32               18                     RETI
+0045 C28C             19     TOISR:  CLR TR0
+0047                  20                     DJNZ R7, SKIP
+*** __________________________________________________^
+*** ERROR #A45 IN 20 (18520381_Chapter2_Part5_5.asm, LINE 20): UNDEFINED SYMBOL (PASS-2)
+0049 C2A9             21                     CLR ET0
+004B 020056           22                     LJMP EXIT
+004E 758C3C           23                     MOV TH0, #HIGH(-50000)
+0051 758AB0           24                     MOV TL0, #LOW(-50000)
+0054 D28C             25                     SETB TR0
+0056 32               26     EXIT:   RETI
+0057 C28E             27     T1ISR:  CLR TR1
+0059 758DFB           28                     MOV TH1, #HIGH(-1250)
+005C 758D1E           29                     MOV TH1, #LOW(-1250)
+005F B291             30                     CPL P1.1
+0061 D28E             31                     SETB TR1
+0063 32               32                     RETI
+                      33             END
+A51 MACRO ASSEMBLER  18520381_CHAPTER2_PART5_5                                            04/19/2020 19:35:11 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ET0. . . . . . . .  B ADDR   00A8H.1 A   
+ET1. . . . . . . .  B ADDR   00A8H.3 A   
+EX0ISR . . . . . .  C ADDR   003AH   A   
+EXIT . . . . . . .  C ADDR   0056H   A   
+IE . . . . . . . .  D ADDR   00A8H   A   
+IT0. . . . . . . .  B ADDR   0088H.0 A   
+MAIN . . . . . . .  C ADDR   0030H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+SKIP . . . . . . .    ----   -----       
+T1ISR. . . . . . .  C ADDR   0057H   A   
+TF0. . . . . . . .  B ADDR   0088H.5 A   
+TF1. . . . . . . .  B ADDR   0088H.7 A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TH1. . . . . . . .  D ADDR   008DH   A   
+TL0. . . . . . . .  D ADDR   008AH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TOISR. . . . . . .  C ADDR   0045H   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+TR1. . . . . . . .  B ADDR   0088H.6 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 1 ERROR(S)

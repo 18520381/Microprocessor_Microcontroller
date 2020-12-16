@@ -1,0 +1,50 @@
+A51 MACRO ASSEMBLER  18520381_CHAPTER2_PART5_4                                            04/19/2020 19:35:26 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\18520381_Chapter2_Part5_4.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE 18520381_Chapter2_Part5_4.asm SET(SMALL) DEBUG PRINT(.\Listings\1852038
+                      1_Chapter2_Part5_4.lst) OBJECT(.\Objects\18520381_Chapter2_Part5_4.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1             ORG 0
+0000 020030            2             LJMP MAIN
+0030                   3             ORG 0030H
+0030 C297              4     EX0ISR: CLR P1.7
+0032 32                5                     RETI
+0013                   6                     ORG 0013H
+0013 D297              7     EX1ISR: SETB P1.7
+0015 32                8                     RETI
+0030                   9                     ORG 30H
+0030 75A885           10     MAIN:   MOV IE, #85H
+0033 D288             11                     SETB IT0
+0035 D28A             12                     SETB IT1
+0037 D297             13                     SETB P1.7
+0039 20B202           14                     JB P3.2, SKIP
+003C C297             15                     CLR P1.7
+003E 80FE             16     SKIP:   SJMP $
+                      17             END
+A51 MACRO ASSEMBLER  18520381_CHAPTER2_PART5_4                                            04/19/2020 19:35:26 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+EX0ISR . . . . . .  C ADDR   0030H   A   
+EX1ISR . . . . . .  C ADDR   0013H   A   
+IE . . . . . . . .  D ADDR   00A8H   A   
+IT0. . . . . . . .  B ADDR   0088H.0 A   
+IT1. . . . . . . .  B ADDR   0088H.2 A   
+MAIN . . . . . . .  C ADDR   0030H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+SKIP . . . . . . .  C ADDR   003EH   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

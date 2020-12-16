@@ -1,0 +1,6 @@
+".\Objects\18520381_Chapter2_Part5_1.obj",
+".\Objects\18520381_Chapter2_Part5_2.obj",
+".\Objects\18520381_Chapter2_Part5_3.obj",
+".\Objects\18520381_Chapter2_Part5_4.obj" 
+TO ".\Objects\Test004" 
+PRINT(".\Listings\Test004.m51")
